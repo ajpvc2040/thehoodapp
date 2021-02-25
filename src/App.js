@@ -6,7 +6,7 @@ class App extends Component {
 
   render(){
     return (
-      <div className="App">
+      <div className="App" style={{width:'100%', height:'100%', margin:'10px'}}>
         <HoodsForm></HoodsForm>
       </div>
     );

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import HoodsTable from './HoodsTable';
 
+
 class HoodsForm extends Component {
 
     render(){

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Table } from 'react-bootstrap';
+import HoodsNew from './HoodsNew'
 import axios from 'axios'
 
 const api = axios.create({
@@ -12,35 +13,41 @@ class HoodsTable extends Component{
         hoods : []
       }
       
-      constructor(){
+    constructor(){
         super();
+        this.refreshData();
+    }
+
+    refreshData(){
         api.get('/').then(res =>{
-          console.log(res.data)
-          this.setState({hoods : res.data})
+            this.setState({hoods : res.data},()=>console.log("force update"))
         });
-      }
+    }
 
     render(){
         return (
-            <Table striped bordered hover size="sm">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Balance</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        this.state.hoods.map(hood => 
-                            <tr key={hood.id}>
-                                <td>{hood.id}</td>
-                                <td>{hood.name}</td>
-                                <td>{hood.balance}</td>
-                            </tr>)
-                    }
-                </tbody>
-            </Table>
+            <div>
+                <Table striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.hoods.map(hood => 
+                                <tr key={hood.id}>
+                                    <td>{hood.id}</td>
+                                    <td>{hood.name}</td>
+                                    <td>{hood.balance}</td>
+                                </tr>)
+                        }
+                    </tbody>
+                </Table>
+                <HoodsNew updateTable={()=>this.refreshData()}></HoodsNew>
+            </div>
         );
     }
 
