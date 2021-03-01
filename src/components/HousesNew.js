@@ -3,65 +3,73 @@ import { InputGroup, FormControl, Button, Modal } from 'react-bootstrap';
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/api/newHood'
+    baseURL: 'http://localhost:8080/api/newHouse'
   })
 
-class HoodsNew extends Component{    
+class HousesNew extends Component{    
 
     state = {
         show : false,
-        hoodName : "Name"
+        houseCode: "Code"
     }
 
     handleClose = () => this.setState(prevState=>({
-        ...prevState.hoodName,
+        ...prevState.houseCode,
         show:false
     }));
 
     handleShow = () => this.setState(prevState=>({
-        hoodName:"Name",
+        houseCode:"Code",
         show:true
     }));
 
     handleSave = () => {
-        const hood = {
-            hoodId : null,
-            name : this.state.hoodName,
+
+        console.log(this.props.hood);
+
+        const house = {
+            hoodId: this.props.hood.hoodId,
+            id : null, 
+            houseCode : this.state.houseCode,
             balance : 0
         }
 
-        console.log(hood.hoodName)
+        console.log(house);
 
-        api.post("/",hood).then(response => {
+        api.post("/", house).then(response => {
             this.props.updateTable();
             this.handleClose();
         });        
     }
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
+        this.setState({
+            show : false,
+            houseCode: "Code"
+        })
     }
     
     render(){
         return (
             <div>
-                <Button variant="primary" onClick={this.handleShow}>New Hood</Button>
+                <Button variant="primary" onClick={this.handleShow}>New House</Button>
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>
-                            New Hood
+                            New House
                         </Modal.Title>
                         <Modal.Body>
                             <InputGroup>
                                 <InputGroup.Prepend>
-                                    <InputGroup.Text>Name</InputGroup.Text>
+                                    <InputGroup.Text>Code</InputGroup.Text>
                                 </InputGroup.Prepend>
                                 <FormControl
-                                    placeholder="Name"
-                                    aria-label="Name"
+                                    placeholder="Code"
+                                    aria-label="Code"
                                     aria-describedby="basic-addon1"
-                                    value = {this.state.hoodName}
-                                    onChange={e => this.setState({ hoodName: e.target.value })}
+                                    value = {this.state.houseCode}
+                                    onChange={e => this.setState({ houseCode: e.target.value })}
                                 />
                             </InputGroup>
                             <Button variant="secondary" onClick={this.handleClose}>
@@ -82,4 +90,4 @@ class HoodsNew extends Component{
 
 }
 
-export default HoodsNew;
+export default HousesNew;

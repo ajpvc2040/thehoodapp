@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Table, Button } from 'react-bootstrap';
-import HoodsNew from './HoodsNew'
+import HousesNew from './HousesNew'
 import axios from 'axios'
 
 
@@ -8,29 +8,35 @@ const api = axios.create({
     baseURL: 'http://localhost:8080/api/'
   })
 
-class HoodsTable extends Component{
+class HousesTable extends Component{
 
     state = {
-        hoods : []
+        houses : []
       }
       
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.refreshData();
     }
 
     refreshData(){
-        api.get('hoods/').then(res =>{
-            this.setState({hoods : res.data},()=>console.log("force update"))
+        console.log(this.props.hood)
+        api.get('houses/',{
+            params : {
+                hoodId : this.props.hood.hoodId
+            }
+        }).then(res =>{
+            res.data.sort((a, b) => a.houseId - b.houseId);
+            this.setState({houses : res.data},()=>console.log("force update"))
         });
     }
 
-    deleteData(hoodParm){
+    deleteData(houseParm){
         console.log("a del");
-        console.log(hoodParm)
+        console.log(houseParm)
         try{
 
-            api.delete('deleteHood/', {data:hoodParm}).then(res =>{
+            api.delete('deleteHouse/', {data:houseParm}).then(res =>{
                 this.refreshData();
             });
 
@@ -48,18 +54,18 @@ class HoodsTable extends Component{
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
+                            <th>Number</th>
                             <th>Balance</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            this.state.hoods.map(hood => 
-                                <tr key={hood.hoodId}>
-                                    <td>{hood.hoodId}</td>
-                                    <td>{hood.name}</td>
-                                    <td>{hood.balance}</td>
+                            this.state.houses.map(house => 
+                                <tr key={house.houseId}>
+                                    <td>{house.houseId}</td>
+                                    <td>{house.houseCode}</td>
+                                    <td>{house.balance}</td>
                                     <td>
                                         <Button variant="danger" 
                                             onClick=
@@ -67,7 +73,7 @@ class HoodsTable extends Component{
                                                 { 
                                                     if (window.confirm('Are you sure you wish to delete this item?')){
                                                         console.log("a delete");
-                                                        this.deleteData(hood);
+                                                        this.deleteData(house);
                                                         console.log("d delete");
                                                     }
                                                         
@@ -78,11 +84,11 @@ class HoodsTable extends Component{
                         }
                     </tbody>
                 </Table>
-                <HoodsNew updateTable={()=>this.refreshData()}></HoodsNew>
+                <HousesNew hood={this.props.hood} updateTable={()=>this.refreshData()}></HousesNew>
             </div>
         );
     }
 
 }
 
-export default HoodsTable;
+export default HousesTable;

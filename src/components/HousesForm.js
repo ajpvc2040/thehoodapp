@@ -1,20 +1,28 @@
 import React, { Component } from 'react'
-import HoodsTable from './HoodsTable';
+import HousesTable from './HousesTable';
 import { Container, Row, Col } from 'react-bootstrap';
 
-class HoodsForm extends Component {
+class HousesForm extends Component {
+
+    state = {
+        hood : {
+            hoodId : 2,
+            hoodName : "Abedules",
+            balance : 0
+        }        
+    }
 
     render(){
         return (
             <Container>
                 <Row>
                     <Col>
-                        <h1 style={{textAlign:'center'}}>Hoods</h1>
+                        <h1 style={{textAlign:'center'}}>Houses</h1>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <HoodsTable></HoodsTable>
+                        <HousesTable hood = {this.state.hood}></HousesTable>
                     </Col>
                 </Row>
             </Container>
@@ -23,4 +31,4 @@ class HoodsForm extends Component {
 
 }
 
-export default HoodsForm;
+export default HousesForm;
